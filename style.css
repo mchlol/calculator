@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+:root {
+    --darkteal: #131515;
+    --grey: #2b2c28;
+    --teal: #339989;
+    --lightteal: #7de2d1;
+    --lightgrey: #fffafb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: var(--darkteal);
+    color: var(--lightgrey);
+}
+
+header {
+    text-align: center;
+}
+
+.calculator {
+    box-shadow: 3px 3px 2px rgb(109, 109, 109);
+    border-radius: 50px;
+    padding: 15px;
+    /* width:380px;
+    height: 630px; */
+    margin: auto;
+    font-size: 18px;
+    background-color: var(--teal);
+}
+
+.screen-wrapper {
+    font-family: 'Orbitron', sans-serif;
+    border-bottom: 1px solid var(--grey);
+    border-right: 1px solid var(--grey);
+    border-radius: 25px;
+    padding: 20px;
+    margin: 20px 15px;
+    background-color: var(--lightgrey);
+    color: var(--darkteal);
+    text-align: right;
+}
+
+.screen-bottom {
+    font-size: 28px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 5px;
+    justify-items: center;
+    align-items: center;
+}
+
+.btn {
+    height: 60px;
+    width: 60px;
+    border: 1px solid var(--teal);
+    border-radius: 30%;
+    background-color: var(--lightgrey);
+    color: var(--darkteal);
+    margin: 5px;
+    font-family: sans-serif;
+    font-size: 28px;
+    text-align: center;
+}
+
+.btn:hover {
+    border: 1px solid var(--lightgrey);
+}
+
+.btn:active {
+    border: 1px solid var(--grey);
+}

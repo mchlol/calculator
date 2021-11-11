@@ -26,8 +26,8 @@ header {
     box-shadow: 3px 3px 2px rgb(109, 109, 109);
     border-radius: 50px;
     padding: 15px;
-    /* width:380px;
-    height: 630px; */
+    width: 380px;
+    height: 580px;
     margin: auto;
     font-size: 18px;
     background-color: var(--teal);
@@ -45,14 +45,14 @@ header {
     text-align: right;
 }
 
-.screen-bottom {
+.screen-main {
     font-size: 28px;
 }
 
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     gap: 5px;
     justify-items: center;
     align-items: center;

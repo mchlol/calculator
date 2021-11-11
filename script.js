@@ -1,4 +1,4 @@
-const screenMain = document.querySelector(".screen-main");
+const screenMain = document.querySelector('.screen-main');
 let currentMainValue = "2";
 screenMain.textContent = currentMainValue;
 
@@ -17,6 +17,17 @@ buttons.forEach((button) => {
     })
 });
 
+function clickHandler(button) {
+    switch (button.classList.contains) {
+        case 'number-btn':
+            screenMain.textContent = button.id;
+            break;
+        case 'function-btn':
+            let topValueFormula = Array.from(currentTopValue);
+            calculate(topValueFormula[0], topValueFormula[1], topValueFormula[2]);
+    }
+}
+
 /*
 click button
 if number, display on screenMain
@@ -31,7 +42,7 @@ if screenTop is 1 + 1, if the next button is a number append it (eg 1+1 becomes 
 * disable decimal if there's already one on the screen
     if (screen contains decimal) { disable decimal button }
 * pressing clear should reset all 'current' variables
-* extra credit: decimals, backspace, keyboard support
+* extra credit: backspace, keyboard support
 */
 
 function calculate(number1, operand, number2) {

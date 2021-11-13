@@ -13,7 +13,7 @@ const buttons = document.querySelectorAll(".btn");
 buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
       console.log(button.id);
-      screenMain.textContent = button.id;
+      clickHandler(e);
     })
 });
 
@@ -22,12 +22,15 @@ function clickHandler(button) {
         case 'number-btn':
             screenMain.textContent = button.id;
             break;
-        case 'function-btn':
+        case 'calculate-btn':
             let topValueFormula = Array.from(currentTopValue);
-            calculate(topValueFormula[0], topValueFormula[1], topValueFormula[2]);
+            let result = calculate(topValueFormula[0], topValueFormula[1], topValueFormula[2]);
+            screenMain.textContent = result;
+            
     }
 }
-
+ // ## USE DATA- KEYS ## //
+ 
 /*
 click button
 if number, display on screenMain

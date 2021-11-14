@@ -2,10 +2,11 @@
 
 :root {
     --darkteal: #131515;
-    --grey: #2b2c28;
+    --darkgrey: #2b2c28;
     --teal: #339989;
     --lightteal: #7de2d1;
     --lightgrey: #fffafb;
+    --midgrey: #6d6d6d;
 }
 
 * {
@@ -14,7 +15,7 @@
 
 body {
     font-family: sans-serif;
-    background-color: var(--darkteal);
+    background-color: var(--midgrey);
     color: var(--lightgrey);
 }
 
@@ -23,11 +24,11 @@ header {
 }
 
 .calculator {
-    box-shadow: 3px 3px 2px rgb(109, 109, 109);
+    box-shadow: 3px 3px 8px var(--darkgrey);
     border-radius: 50px;
     padding: 15px;
     width: 380px;
-    height: 580px;
+    height: 570px;
     margin: auto;
     font-size: 18px;
     background-color: var(--teal);
@@ -40,15 +41,22 @@ header {
     border-radius: 25px;
     padding: 20px;
     margin: 20px 15px;
-    background-color: var(--lightgrey);
-    color: var(--darkteal);
+    background-color: var(--darkteal);
+    color: var(--lightgrey);
     text-align: right;
     word-wrap: break-word;
     word-break: break-all;
 }
 
+.screen-top {
+    height: 22px;
+    width: 279px;
+}
+
 .screen-main {
     font-size: 28px;
+    height: 35px;
+    width: 279px;
 }
 
 .buttons {
@@ -60,21 +68,22 @@ header {
     place-content: center;
 }
 
-.span-two {
-    grid-column: span 2;
-}
-
 .btn {
     height: 60px;
     width: 60px;
     border: 1px solid var(--teal);
-    border-radius: 30%;
+    border-radius: 15px;
     background-color: var(--lightgrey);
     color: var(--darkteal);
     margin: 5px;
     font-family: sans-serif;
     font-size: 28px;
     text-align: center;
+}
+
+.span-two {
+    width: 150px;
+    grid-column: span 2;
 }
 
 .btn:hover {

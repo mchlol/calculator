@@ -35,7 +35,8 @@ header {
 }
 
 .screen-wrapper {
-    font-family: 'Orbitron', sans-serif;
+    /* font-family: 'Orbitron', sans-serif; */
+    font-family:'Courier New', Courier, monospace;
     border-bottom: 1px solid var(--grey);
     border-right: 1px solid var(--grey);
     border-radius: 25px;
@@ -46,6 +47,8 @@ header {
     text-align: right;
     word-wrap: break-word;
     word-break: break-all;
+    overflow: hidden;
+    line-height: 2;
 }
 
 .screen-top {
@@ -92,4 +95,5 @@ header {
 
 .btn:active {
     border: 1px solid var(--grey);
+    background-color: var(--lightteal);
 }

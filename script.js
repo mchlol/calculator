@@ -3,17 +3,18 @@ let currentMainValue = 0;
 screenMain.textContent = currentMainValue;
 
 const screenTop = document.querySelector('.screen-top');
-let currentTopValue;
+let currentTopValue = 0;
 screenTop.textContent = currentTopValue;
 
-let currentOperand;
+let currentOperand = null;
+let newValue;
 
 const buttons = document.querySelectorAll('.btn');
 
-// const allClearBtn = document.querySelector('[data-all-clear]');
+// const allClearBtn = document.querySelector('[data-allclear]');
 // const clearBtn = document.querySelector('[data-clear]');
 // const operandBtns = document.querySelectorAll('[data-operand');
-const numberBtns = document.querySelector('[data-number]');
+// const numberBtns = document.querySelectorAll('[data-number]');
 // const decimalBtn = document.querySelector('[data-decimal');
 // const equalsBtn = document.querySelector('[data-equals');
 
@@ -55,43 +56,49 @@ function operate(operand, number1, number2) {
 
 buttons.forEach(button => {
     button.addEventListener('click', () => {
-        displayValue(button);
+        handleClick(button);
     })
 })
 
-function displayValue(button) {
-    currentMainValue = button.id;
-    screenMain.textContent = currentMainValue;
-}
-
-
+// max numbers = 10
 function handleClick(button) {
-    if (button.hasAttribute('[data-number]')) { // first check if the button was a number, not an operand etc.
-        if (screenMain.textContent) { // if this returns true textContent has a value
-            screenMain.textContent += currentMainValue;
-        } else { // if it's false it has no value and we can give it one
+    if (currentMainValue === 'NaN') {
+        currentMainValue = 0;
+        screenMain.textContent = currentMainValue;
+    } 
+    if (button.id === 'allclear') {
+        currentMainValue = 0;
+        currentTopValue = 0;
+        screenMain.textContent = currentMainValue;
+    } else if (button.id === 'clear') {
+        clear(currentMainValue);
+    } else if ('number' in button.dataset) { 
+        if (currentMainValue === 0) {
+            currentMainValue = button.id;
             screenMain.textContent = currentMainValue;
+        } else if (currentMainValue === NaN) {
+            currentMainValue = button.id;
+            screenMain.textContent = currentMainValue;
+        } else {
+        currentMainValue += button.id;
+        screenMain.textContent = currentMainValue;
         }
-    // } else if () {
-    
     } else {
         console.log('button was not a number')
     }
 }
 
-/*
-click number button
-number is added to currentMainValue
-currentMainValue appears in screenMain
-click operand
-number in currentMainValue is moved to currentTopValue
-currentTopValue appears in screenTop
-operand shows to the right of currentTopValue
-click another number
-that number replaces the value in currentMainValue, showing in screenMain
-click equals button
-currentMainValue is moved to the right of currentTopValue eg 1 + 1 
-1 + 1 is calculated
-calculated value updates currentMainValue
-currentMainValue shows in screenMain
-*/
+// only remove the last digit from a number
+// ## THIS STRING METHOD REMOVES THE LEADING 0 ##
+function clear(number) {
+    if (number === 0) {
+        return screenMain.textContent = currentMainValue; // ie do nothing
+    } else {
+    let string = number.toString();
+    let newString = string.slice(0,-1);
+    let newNumber = parseInt(newString);
+    currentMainValue = newNumber;
+    return screenMain.textContent = currentMainValue;
+    }
+}
+

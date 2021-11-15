@@ -32,6 +32,16 @@ At this point I'll set an exact size of the screen parts so for now I don't need
 }
 ```
 
+*Dealing with overflow of numbers*  
+We still want the numbers to be present so we can perform calculations on them if necessary. But we don't want to be able to see them. 
+
+```
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+    line-height: 2;
+```
+
 The AC button and = button are supposed to span two columns in the grid layout, however I don't want to waste too much time mucking around with the layout (an easy trap to fall into!) so let's move on to the script.  
 
 
@@ -131,17 +141,49 @@ Check if button is a number
     ... 
 ```
 
+First let's look at what to do if the button is a number. This will end up looking something like this:  
+```
+function handleClick(button) {
+    if ('number' in button.dataset) { 
+        currentMainValue = button.id;
+        screenMain.textContent = currentMainValue;
+    } else {
+        console.log('button was not a number')
+    }
+}
+```
+
+What I tried and what didn't work/did work if the button that was clicked had a specific data-attribute:  
+* `button.hasAttribute('[data-number]');` returns FALSE
+* `button.dataset['number'];` returns FALSE
+* `'number' in button.dataset;` returns TRUE! [Thanks MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset)
+
 Some things we need to look out for:
 * Only when the = is clicked do we want to actually perform any calculation. As shown above if there's already a number in the main screen we want to put the next number next to it. Eg 1 becomes 11, not 1+1. However we can't call the calculator function until we have a whole formula. 
 * if a decimal point is already present in the number we want to prevent another one being added
 * storing the operand in its own variable eg `currentOperand` saves trying to perform calculations on a string
 
-### A quick thought
+### Decimals
 I can work around whether there is a decimal point in the number displayed by creating a variable `decimalActive = false` and setting it to `true` once the decimal button is clicked. Maybe this can be cleared once the equals button is pressed? Come back to this. 
 
+### the Clear button
+```
+function clear(number) {
+    let string = number.toString();
+    let newString = string.slice(0,-1);
+    let newNumber = parseInt(newString);
+    currentMainValue = newNumber;
+    return screenMain.textContent = currentMainValue;
+}
+```
+
+![](./images/screenshot-calculator-NaN.gif)  
+The clear button does delete the last digit from a number perfectly - but once it runs out of numbers, we end up with NaN.  
+
+
+### More steps
 
 * Create the functions that populate the display when you click the number buttons.  
-
 
 
 * You should be storing the display value in a variable somewhere for later use.

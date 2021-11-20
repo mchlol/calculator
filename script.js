@@ -50,10 +50,6 @@ function operate(operand, number1, number2) {
     }
 }
 
-// store the result in currentValue variable, 
-// append it to the screen
-//doesnt need to return it ?
-
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         handleClick(button);
@@ -62,22 +58,19 @@ buttons.forEach(button => {
 
 // max numbers = 10
 function handleClick(button) {
-    if (currentMainValue === 'NaN') {
-        currentMainValue = 0;
-        screenMain.textContent = currentMainValue;
-    } 
     if (button.id === 'allclear') {
         currentMainValue = 0;
         currentTopValue = 0;
         screenMain.textContent = currentMainValue;
+        screenTop.textContent = currentTopValue;
     } else if (button.id === 'clear') {
         clear(currentMainValue);
     } else if ('number' in button.dataset) { 
         if (currentMainValue === 0) {
             currentMainValue = button.id;
             screenMain.textContent = currentMainValue;
-        } else if (currentMainValue === NaN) {
-            currentMainValue = button.id;
+        } else if (currentMainValue === NaN) { // if value is NaN ?
+            currentMainValue = 0;
             screenMain.textContent = currentMainValue;
         } else {
         currentMainValue += button.id;
@@ -88,17 +81,23 @@ function handleClick(button) {
     }
 }
 
-// only remove the last digit from a number
-// ## THIS STRING METHOD REMOVES THE LEADING 0 ##
 function clear(number) {
     if (number === 0) {
-        return screenMain.textContent = currentMainValue; // ie do nothing
+        currentMainValue = 0;
+        return screenMain.textContent = currentMainValue;
+    } else if (number <= 9) {
+        currentMainValue = 0;
+        return screenMain.textContent = currentMainValue;
+    } else if (number > 10) {
+        let string = number.toString();
+        let newString = string.slice(0,-1);
+        let newNumber = parseInt(newString);
+        currentMainValue = newNumber;
+        return screenMain.textContent = currentMainValue;
     } else {
-    let string = number.toString();
-    let newString = string.slice(0,-1);
-    let newNumber = parseInt(newString);
-    currentMainValue = newNumber;
-    return screenMain.textContent = currentMainValue;
+        return console.error("ERROR");
     }
-}
+};
+
+
 

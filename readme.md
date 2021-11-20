@@ -178,7 +178,48 @@ function clear(number) {
 ```
 
 ![](./images/screenshot-calculator-NaN.gif)  
-The clear button does delete the last digit from a number perfectly - but once it runs out of numbers, we end up with NaN.  
+The clear button does delete the last digit from a number perfectly - but once it runs out of numbers, we end up with NaN. Then when we click another number we end up with something like `NaN123`. We should prevent it from reaching NaN in the first place. Let's check if the length of the number is 1 (ie if there is only one digit) and if so, we don't need to remove the last digital. We'll just reset the number to 0. 
+
+```
+function clear(number) {
+    if (number.length === 1) {
+        currentMainValue = 0;
+        return screenMain.textContent = currentMainValue;
+    } else {
+    let string = number.toString();
+    let newString = string.slice(0,-1);
+    let newNumber = parseInt(newString);
+    currentMainValue = newNumber;
+    return screenMain.textContent = currentMainValue;
+    }
+}
+```
+
+Guess what guys - `length` isn't a method you can use on a type of `number`. What I'm trying to do is find out if the number is a single digit, right? This is a little long-winded but I'm instead going to check if the number is 9 or lower (a single digit) and if so, reset my screen value to 0. If it's 10 or higher (more than one digit!) then we'll run our string method code block.  
+
+```
+function clear(number) {
+    if (number === 0) {
+        currentMainValue = 0;
+        return screenMain.textContent = currentMainValue;
+    } else if (number <= 9) {
+        currentMainValue = 0;
+        return screenMain.textContent = currentMainValue;
+    } else if (number > 10) {
+        let string = number.toString();
+        let newString = string.slice(0,-1);
+        let newNumber = parseInt(newString);
+        currentMainValue = newNumber;
+        return screenMain.textContent = currentMainValue;
+    } else {
+        return console.error("ERROR");
+    }
+};
+``` 
+
+**It works!**  
+One more thing - setting the screen text to 0 creates problems because the functions are all based around the content of the variable (`currentMainValue`) so that *has to be set first*. Then we assign it to the `textContent`. 
+
 
 
 ### More steps

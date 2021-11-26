@@ -6,7 +6,9 @@ Alright. Makin' a calculator. I'm not terribly enthused about this project (any 
 
 * [The main project page on the Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations/lessons/calculator)  
 * [This project from section.io](https://www.section.io/engineering-education/building-a-calculator-a-javascript-project-for-beginners/)  
-* [Changing image size in Markdown 😅](https://stackoverflow.com/questions/14675913/changing-image-size-in-markdown)
+
+
+<br>
 
 ## Setting Up
 
@@ -33,7 +35,7 @@ At this point I'll set an exact size of the screen parts so for now I don't need
 ```
 
 *Dealing with overflow of numbers*  
-We still want the numbers to be present so we can perform calculations on them if necessary. But we don't want to be able to see them. 
+We still want the numbers to be present so we can perform calculations on them if necessary. But we don't want to be able to see them. A quick hack to deal with this for now and we'll come back to rounding later. 
 
 ```
     word-wrap: break-word;
@@ -44,11 +46,13 @@ We still want the numbers to be present so we can perform calculations on them i
 
 The AC button and = button are supposed to span two columns in the grid layout, however I don't want to waste too much time mucking around with the layout (an easy trap to fall into!) so let's move on to the script.  
 
+<br>
 
 ## The Basics
 
 Thinking firstly about the steps involved in using a calculator, and also reviewing the tips from [the project page](https://www.theodinproject.com/paths/foundations/courses/foundations/lessons/calculator).  
 
+<br>
 
 ### Steps
 
@@ -66,9 +70,10 @@ if screenTop is 1 + 1, if the next button is a number append it (eg 1+1 becomes 
 - disable decimal if there's already one on the screen  
     if (screen contains decimal) { disable decimal button }  
 - pressing clear should clear the data in all 'current' variables  
-- extra credit: backspace, keyboard support   
+- extra credit: backspace, keyboard & pointer support   
 ```
 
+<br>
 
 ## The Script
 
@@ -97,6 +102,7 @@ buttons.forEach((button) => {
 Cool, it works. But we actually only want numbers to display on the screen. I tried creating a function using an `if` statement based on `.classList.contains()` and used that as a callback function, but got a TypeError reading properties of undefined. [This project from section.io](https://www.section.io/engineering-education/building-a-calculator-a-javascript-project-for-beginners/) suggests using data-attributes instead of classes so let's give that a go.  
 Rather than noodling around with classes, we can use `hasAttribute` to check if a specific data-attribute is present.  
 
+<br>
 
 ### Functions
 
@@ -153,18 +159,18 @@ function handleClick(button) {
 }
 ```
 
-What I tried and what didn't work/did work if the button that was clicked had a specific data-attribute:  
+What I tried and what didn't work/did work: if the button that was clicked had a specific data-attribute:  
 * `button.hasAttribute('[data-number]');` returns FALSE
-* `button.dataset['number'];` returns FALSE
+* `button.dataset['number'];` returns FALSE  
+Instead:  
 * `'number' in button.dataset;` returns TRUE! [Thanks MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset)
 
-Some things we need to look out for:
+*Some things we need to look out for:*
 * Only when the = is clicked do we want to actually perform any calculation. As shown above if there's already a number in the main screen we want to put the next number next to it. Eg 1 becomes 11, not 1+1. However we can't call the calculator function until we have a whole formula. 
 * if a decimal point is already present in the number we want to prevent another one being added
 * storing the operand in its own variable eg `currentOperand` saves trying to perform calculations on a string
 
-### Decimals
-I can work around whether there is a decimal point in the number displayed by creating a variable `decimalActive = false` and setting it to `true` once the decimal button is clicked. Maybe this can be cleared once the equals button is pressed? Come back to this. 
+<br>
 
 ### the Clear button
 ```
@@ -218,16 +224,86 @@ function clear(number) {
 ``` 
 
 **It works!**  
-One more thing - setting the screen text to 0 creates problems because the functions are all based around the content of the variable (`currentMainValue`) so that *has to be set first*. Then we assign it to the `textContent`. 
+One more thing - setting the screen text to 0 creates problems because the functions are all based around the content of the variable (`currentMainValue`) so that *has to be set first*. Then we assign it to the `textContent`.  
+
+<br>
+
+### The Decimal Point
+
+I can work around whether there is a decimal point in the number displayed by creating a variable `decimalActive = false` and setting it to `true` once the decimal button is clicked. Maybe this can be cleared once the equals button is pressed? Come back to this.  
+
+In terms of adding the decimal point on the screen, it makes sense that we use the same concept as when adding another number (ie 1+1 = 11, 1+. = 1.). 
+
+```
+function decimalPoint(number) {
+    let decimalAdded = number += ".";
+    let newNumber = parseInt(decimalAdded);
+    currentMainValue = newNumber;
+    return screenMain.textContent = currentMainValue;
+}
+```
+
+On a regular calculator the decimal point is either always visible, or appears as soon as you press the . button. The function above is supposed to make it appear. HOWEVER, while `number += ".";` adds the decimal point, `parseInt` immediately removes it when turning the string back into a number.  
+Chaining [`toFixed(1)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) onto the `parseInt` method solves this...but then clicking another number button appends the number after the 0. This project is hilarious.  
+So we want to do something like replace the ".0" with ".1" instead of ".01". Let's put this in our `handleClick` and see what happens.  
+```
+else if (decimalActive) {
+            parseInt(currentMainValue) + `.${button.id}`
+```
+**Quick note: make sure to set `decimalPoint` back to false on both clear and all clear cases!**
+
+* `parseInt()` converts the number back into an integer.  
+* `parseFloat()` returns the number as an integer if nothing (or 0) is after the decimal point.  
+* `toFixed()` keeps or converts the number into a string.  
+
+Where to handle making sure we are working with numbers in the final calculation but also controlling how the numbers are displayed? By using 'Number()' in the individual addition etc. function:  
+```
+const add = function add(num1, num2) {
+    return Number(num1) + Number(num2);
+}
+```
+This works a treat...so far!
 
 
+<br>
 
-### More steps
+### Making the calculator calculate
+
+Looking at some different ways to handle the input. One way is to store the operand in a variable, and the numbers being operated on in separate variables and pass them into the function as separate parameters.  
+
+If we make the parts that will make up the formula into an [array ‘stack’](http://web.archive.org/web/20110619035044/http://aymanh.com/9-javascript-tips-you-may-not-know) we can read the specific indexes of the array to perform our calculation.  
+
+Say we have an array `x = [1, “*”, 1]`
+
+```
+function operate(num1, operand, num2) {
+    let parameters = Array.from(num1,operand,num2);
+    switch(parameters[1]) {
+        case add:
+            return add(parameters[0],parameters[2]);
+}
+}
+```
+This only works if the * etc. can be recognised as a string meaning we change the switch statement cases to match, so `case add` becomes `case "+"`. The case has to return true for its code to run. 
+
+Another goof: why are we passing individual arguments into the function when we are supposedly adding the elements to a stack? Why not just pass an array? Silly.  
+```
+function operate(array) {
+    switch(array[1]) {
+        case "+":
+            return add(array[0],array[2]);
+        ...
+```
+
+<br>
+
+
+### [More steps](https://www.theodinproject.com/paths/foundations/courses/foundations/lessons/calculator)
+
+* Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
 
 * Create the functions that populate the display when you click the number buttons.  
 
-
 * You should be storing the display value in a variable somewhere for later use.
-
 
 * Store the first number that is input into the calculator when a user presses an operator, and also save which operation has been chosen and then operate() on them when the user presses the “=” key.

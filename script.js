@@ -100,14 +100,10 @@ function handleClick(button) {
         }
 
     } else if ('number' in button.dataset) { 
-        // check currentTopValue is true (contains a value)
+        // check currentTopValue has value
         if (currentMainValue === 0) {
             currentMainValue = button.id;
             screenMain.textContent = currentMainValue;
-        // } else if (decimalActive) {
-        //     let decimalHandler = currentMainValue += button.id;
-        //     currentMainValue = Number(decimalHandler);
-        //     screenMain.textContent = currentMainValue;
 
         } else {
         currentMainValue += button.id;
@@ -116,17 +112,18 @@ function handleClick(button) {
 
     } else if ('operand' in button.dataset) {
         currentOperand = button.id;
+        operandActive = true;
         console.log(`Current operand is now ${currentOperand}`);
         currentTopValue.push(currentMainValue);
         currentTopValue.push(currentOperand);
-        screenTop.textContent = currentTopValue;
+        screenTop.textContent = currentTopValue.join('');
         currentMainValue = 0;
         screenMain.textContent = currentMainValue;
         // clear the currentMainValue 
 
     } else if ('equals' in button.dataset) {
         currentTopValue.push(currentMainValue);
-        screenTop.textContent = currentTopValue;
+        screenTop.textContent = currentTopValue.join('');
         if (currentTopValue.length < 3) {
             console.log('insufficient formula')
         } else {

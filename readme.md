@@ -182,8 +182,8 @@ function clear(number) {
     return screenMain.textContent = currentMainValue;
 }
 ```
+[<img src="./images/screenshot-calculator-NaN.gif" height="500"/>](./images/screenshot-calculator-NaN.gif)
 
-![](./images/screenshot-calculator-NaN.gif)  
 The clear button does delete the last digit from a number perfectly - but once it runs out of numbers, we end up with NaN. Then when we click another number we end up with something like `NaN123`. We should prevent it from reaching NaN in the first place. Let's check if the length of the number is 1 (ie if there is only one digit) and if so, we don't need to remove the last digital. We'll just reset the number to 0. 
 
 ```
@@ -294,6 +294,18 @@ function operate(array) {
             return add(array[0],array[2]);
         ...
 ```
+
+Making the top value show the formula is cool but if it's just a straight up array it looks pretty ugly:
+![](./images/screenshot-calculator-array.png)  
+
+What we can do is use the array.join('') method where the indexes of the array can be joined into a string, and the '' just means there is no separator.  
+[<img src="./images/screenshot-calculator-operate.gif" height="500"/>](./images/screenshot-calculator-operate.gif)  
+
+Now the next thing to tackle is where the = prompts a calculation on the array in the top value.  
+Say it's "1 + 1" which appears in the top screen, and outputs "2" in the main screen. 
+* If we press = again we want to add 1 to 2. 
+* If we press - we have to replace the top value with "2 - " and if we then press * we have to replace the top value with "2 * "
+* If we press another number, we have to clear the top value and set the main screen to show the new number only. 
 
 <br>
 

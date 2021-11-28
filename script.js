@@ -10,6 +10,7 @@ let currentOperand = null;
 let operandActive = false;
 let decimalActive = false;
 let newValue;
+let equalsActive = false;
 
 const buttons = document.querySelectorAll('.btn');
 
@@ -81,11 +82,7 @@ buttons.forEach(button => {
 // max numbers = 10
 function handleClick(button) {
     if (button.id === 'allclear') {
-        decimalActive = false;
-        currentMainValue = 0;
-        currentTopValue = [];
-        screenMain.textContent = currentMainValue;
-        screenTop.textContent = currentTopValue;
+        allClear();
 
     } else if (button.id === 'clear') {
         decimalActive = false;
@@ -100,8 +97,17 @@ function handleClick(button) {
         }
 
     } else if ('number' in button.dataset) { 
+
+        if (equalsActive) {
+
+        }
+
         // check currentTopValue has value
-        if (currentMainValue === 0) {
+        else if (currentMainValue === 0) {
+            currentMainValue = button.id;
+            screenMain.textContent = currentMainValue;
+
+        } else if (currentTopValue) {
             currentMainValue = button.id;
             screenMain.textContent = currentMainValue;
 
@@ -111,25 +117,46 @@ function handleClick(button) {
         }
 
     } else if ('operand' in button.dataset) {
+
+        if (currentTopValue.includes("+" || "-" || "*" || "/")) {
+            // check for all operands
+            console.log(`operand found: ${currentOperand}`)
+            currentTopValue = [];
+        }
         currentOperand = button.id;
         operandActive = true;
         console.log(`Current operand is now ${currentOperand}`);
         currentTopValue.push(currentMainValue);
         currentTopValue.push(currentOperand);
         screenTop.textContent = currentTopValue.join('');
-        currentMainValue = 0;
-        screenMain.textContent = currentMainValue;
-        // clear the currentMainValue 
+
+        // don't clear the currentMainValue 
 
     } else if ('equals' in button.dataset) {
-        currentTopValue.push(currentMainValue);
-        screenTop.textContent = currentTopValue.join('');
-        if (currentTopValue.length < 3) {
-            console.log('insufficient formula')
+        console.log(`equalsActive = ${equalsActive}`);
+        if (!equalsActive) {
+            equalsActive = true;
+            currentTopValue.push(currentMainValue);
+            screenTop.textContent = currentTopValue.join('');
+            if (currentTopValue.length < 3) {
+                console.log('insufficient formula')
+            } else {
+            let result = operate(currentTopValue);
+            currentMainValue = result;
+            screenMain.textContent = currentMainValue;
+            }
+        
         } else {
-        let result = operate(currentTopValue);
-        screenMain.textContent = result;
-        }
+            equalsActive = true;
+            // if formula is 1+2=3 then new formula should be 3+2
+            currentTopValue[0] = currentMainValue;
+            screenTop.textContent = currentTopValue.join('');
+            
+            let result = operate(currentTopValue);
+            currentMainValue = result;
+            screenMain.textContent = currentMainValue;
+
+    }
     } else {
         console.log('no handler for this button yet')
     }
@@ -153,6 +180,15 @@ function hasPeriod(str) {
         console.log('not a float')
     }
 }
+
+function allClear() {
+    decimalActive = false;
+    equalsActive = false;
+    currentMainValue = 0;
+    currentTopValue = [];
+    screenMain.textContent = currentMainValue;
+    screenTop.textContent = currentTopValue;
+};
 
 function clear(number) {
     if (number === 0) {

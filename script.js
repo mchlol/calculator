@@ -1,25 +1,29 @@
 const screenMain = document.querySelector('.screen-main');
+
 let currentMainValue = 0;
+
+function displayMain(displayValue) {
+currentMainValue = displayValue;
 screenMain.textContent = currentMainValue;
+}
+
+displayMain(0);
 
 const screenTop = document.querySelector('.screen-top');
-let currentTopValue = [];
-screenTop.textContent = currentTopValue;
 
-let currentOperand = null;
+currentTopValue = [];
+
+function displayTop() {
+screenTop.textContent = currentTopValue;
+};
+
+
+let currentOperand;
 let operandActive = false;
 let decimalActive = false;
-let newValue;
 let equalsActive = false;
 
 const buttons = document.querySelectorAll('.btn');
-
-// const allClearBtn = document.querySelector('[data-allclear]');
-// const clearBtn = document.querySelector('[data-clear]');
-// const operandBtns = document.querySelectorAll('[data-operand');
-// const numberBtns = document.querySelectorAll('[data-number]');
-// const decimalBtn = document.querySelector('[data-decimal');
-// const equalsBtn = document.querySelector('[data-equals');
 
 
 const add = function add(num1, num2) {
@@ -35,7 +39,12 @@ const multiply = function multiply(num1, num2) {
 }
 
 const divide = function divide(num1, num2) {
+    if (num2 == 0) {
+        alert("Cannot divide by zero - resetting values")
+        return allClear();
+    } else {
     return Number(num1) / Number(num2);
+    }
 }
 
 // stack can be an array eg. [1, “*”, 1]
@@ -72,6 +81,7 @@ function operate(array) {
 //             console.log("no operand input");
 //     }
 // }
+// still not sure if i need this
 
 buttons.forEach(button => {
     button.addEventListener('click', () => {
@@ -99,7 +109,7 @@ function handleClick(button) {
     } else if ('number' in button.dataset) { 
 
         if (equalsActive) {
-
+            console.log("equals already active)")
         }
 
         // check currentTopValue has value
@@ -185,8 +195,8 @@ function allClear() {
     decimalActive = false;
     equalsActive = false;
     currentMainValue = 0;
-    currentTopValue = [];
     screenMain.textContent = currentMainValue;
+    currentTopValue = [];
     screenTop.textContent = currentTopValue;
 };
 

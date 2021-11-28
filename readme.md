@@ -1,6 +1,6 @@
 # Calculator
 
-Alright. Makin' a calculator. I'm not terribly enthused about this project (any more than a to-do list app or memory game) but it's good practice so let's go!  
+Project started: 5th November 2021 
 
 ### Resources
 
@@ -14,12 +14,12 @@ Alright. Makin' a calculator. I'm not terribly enthused about this project (any 
 
 Firstly let's think about what you want to do with a calculator. Add some numbers, multiply them, subtract, divide. We also need to be able to clear the screen. So let's go ahead and add some buttons and basic styling.  
 
-*fast-forward*  
+*fast-forward >>*  
 
 [<img src="./images/screenshot-calculator01.png" height="500"/>](./images/screenshot-calculator01.png)
 
 The screen is divided into two parts - the main part of the screen will hold the value of whichever number button has been pressed. The smaller top part of the screen will hold the formula we are going to calculate.   
-At this point I'll set an exact size of the screen parts so for now I don't need to worry about how they will look when there's no value in them.  
+At this point I'll set an exact size of the screen parts so *for now* I don't need to worry about how they will look when there's no value in them.  
 
 ```
 .screen-top {
@@ -298,12 +298,12 @@ function operate(array) {
 Making the top value show the formula is cool but if it's just a straight up array it looks pretty ugly:
 ![](./images/screenshot-calculator-array.png)  
 
-What we can do is use the array.join('') method where the indexes of the array can be joined into a string, and the '' just means there is no separator.  
+What we can do is use the [array.join('') method](https://sebhastian.com/javascript-array-string/) where the indexes of the array can be joined into a string, and the '' just means there is no separator.  
 [<img src="./images/screenshot-calculator-operate.gif" height="500"/>](./images/screenshot-calculator-operate.gif)  
 
 Now the next thing to tackle is where the = prompts a calculation on the array in the top value.  
 Say it's "1 + 1" which appears in the top screen, and outputs "2" in the main screen. 
-* If we press = again we want to add 1 to 2. 
+* If we press = again we want to take the output value of 2 and add the same number (1) to it. Essentially we want to "1+1+1+1" etc. when = is pressed. 
 * If we press - we have to replace the top value with "2 - " and if we then press * we have to replace the top value with "2 * "
 * If we press another number, we have to clear the top value and set the main screen to show the new number only. 
 

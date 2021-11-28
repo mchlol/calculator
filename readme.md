@@ -295,17 +295,28 @@ function operate(array) {
         ...
 ```
 
-Making the top value show the formula is cool but if it's just a straight up array it looks pretty ugly:
+Making the top value show the formula is cool but if it's just a straight up array it looks pretty ugly:  
+
 ![](./images/screenshot-calculator-array.png)  
 
 What we can do is use the [array.join('') method](https://sebhastian.com/javascript-array-string/) where the indexes of the array can be joined into a string, and the '' just means there is no separator.  
 [<img src="./images/screenshot-calculator-operate.gif" height="500"/>](./images/screenshot-calculator-operate.gif)  
+Sort of works. 
 
 Now the next thing to tackle is where the = prompts a calculation on the array in the top value.  
-Say it's "1 + 1" which appears in the top screen, and outputs "2" in the main screen. 
-* If we press = again we want to take the output value of 2 and add the same number (1) to it. Essentially we want to "1+1+1+1" etc. when = is pressed. 
-* If we press - we have to replace the top value with "2 - " and if we then press * we have to replace the top value with "2 * "
-* If we press another number, we have to clear the top value and set the main screen to show the new number only. 
+Say it's "1 + 2" which appears in the top screen, and outputs "3" in the main screen. 
+* If we press = again we want to take the output value of 3 and add the last number pressed (2) to it. 
+* If we press - we have to replace the top value with "3 - " and if we then press * we have to replace the top value with "3 * " etc.
+* If we press another number, we have to clear the top value and set the main screen to show the new number only.  
+
+```
+currentTopValue[0] = currentMainValue;
+            screenTop.textContent = currentTopValue.join('');
+            
+            let result = operate(currentTopValue);
+            currentMainValue = result;
+            screenMain.textContent = currentMainValue;
+```
 
 <br>
 
@@ -313,6 +324,17 @@ Say it's "1 + 1" which appears in the top screen, and outputs "2" in the main sc
 ### [More steps](https://www.theodinproject.com/paths/foundations/courses/foundations/lessons/calculator)
 
 * Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
+
+```
+const divide = function divide(num1, num2) {
+    if (num2 == 0) {
+        alert("Cannot divide by zero - resetting values")
+        return allClear();
+    } else {
+    return Number(num1) / Number(num2);
+    }
+}
+```
 
 * Create the functions that populate the display when you click the number buttons.  
 

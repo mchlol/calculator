@@ -320,6 +320,15 @@ currentTopValue[0] = currentMainValue;
 
 <br>
 
+## Operands
+
+Ok so if an operand is pressed we are preparing to calculate whatever is in the top value. The problem is that I have a case for if the operand is active, the main value would be replaced with whatever number was pressed. 
+Cool. But then, the flaw in my logic was that numbers of more than one digit wouldn't work - it was just replacing whatever the current value was.
+Eventually I realised I needed to set the active operand variable BACK TO FALSE (!) which allowed me to then keep appending numbers to the main value.  
+
+Another problem: when performing a calculation, say we go `1 + 2 * 10` without pressing equals in between, we want the calculator to operate as " `(1+2) * 10` ".  
+Similarly if we DO press equals - `1+2 = 3` - then press *, we want to perform 1+2 and store the result i in topvalue, with the new operand, as `[${result},"*",]`.  
+
 
 ### [More steps](https://www.theodinproject.com/paths/foundations/courses/foundations/lessons/calculator)
 

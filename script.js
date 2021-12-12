@@ -81,7 +81,7 @@ function operate(array) {
 //             console.log("no operand input");
 //     }
 // }
-// still not sure if i need this
+
 
 buttons.forEach(button => {
     button.addEventListener('click', () => {
@@ -94,56 +94,77 @@ function handleClick(button) {
     if (button.id === 'allclear') {
         allClear();
 
+
     } else if (button.id === 'clear') {
         decimalActive = false;
         clear(currentMainValue);
 
+
     } else if ('decimal' in button.dataset) {
-        if (decimalActive === true) {
+
+        if (operandActive) {
+            // check if operand active first
+            // if so, clear currentMainValue & replace with "0."
+            decimalActive = true;
+            currentMainValue = "0.";
+            screenMain.textContent = currentMainValue;
+        } else if (decimalActive === true) {
             console.log(`Decimal point present: ${decimalActive}`);
+            // do nothing - unable to add a 2nd decimal point
         } else {
+            // declare decimal present & run function to add it
         decimalActive = true;
         decimalPoint(currentMainValue);
         }
 
+
     } else if ('number' in button.dataset) { 
 
-        if (equalsActive) {
-            console.log("equals already active)")
+        if (decimalActive) {
+            currentMainValue += button.id;
+            screenMain.textContent = currentMainValue;
+
+        } else if (equalsActive) {
+            console.log("equals already active");
+            currentTopValue =  [];
+            screenTop.textContent = currentTopValue;
+            currentMainValue = button.id;
+            screenMain.textContent = currentMainValue;
         }
 
-        // check currentTopValue has value
-        else if (currentMainValue === 0) {
+        else if (operandActive) {
+            console.log(`operand active: ${operandActive}`)
+            
             currentMainValue = button.id;
             screenMain.textContent = currentMainValue;
+            operandActive = false;
+            decimalActive = false;
+        }
+        
+        else if (currentMainValue == 0) {
 
-        } else if (currentTopValue) {
+            if (decimalActive) {
+                currentMainValue += button.id;
+                screenMain.textContent = currentMainValue;
+            } else {
             currentMainValue = button.id;
             screenMain.textContent = currentMainValue;
+            }
 
         } else {
         currentMainValue += button.id;
         screenMain.textContent = currentMainValue;
         }
 
+
     } else if ('operand' in button.dataset) {
+        equalsActive = false;
+        decimalActive = false;
+        operandHandler(button.id);
 
-        if (currentTopValue.includes("+" || "-" || "*" || "/")) {
-            // check for all operands
-            console.log(`operand found: ${currentOperand}`)
-            currentTopValue = [];
-        }
-        currentOperand = button.id;
-        operandActive = true;
-        console.log(`Current operand is now ${currentOperand}`);
-        currentTopValue.push(currentMainValue);
-        currentTopValue.push(currentOperand);
-        screenTop.textContent = currentTopValue.join('');
-
-        // don't clear the currentMainValue 
 
     } else if ('equals' in button.dataset) {
-        console.log(`equalsActive = ${equalsActive}`);
+        console.log(`equals already active: ${equalsActive}`);
         if (!equalsActive) {
             equalsActive = true;
             currentTopValue.push(currentMainValue);
@@ -167,8 +188,38 @@ function handleClick(button) {
             screenMain.textContent = currentMainValue;
 
     }
+
     } else {
-        console.log('no handler for this button yet')
+        console.log('no handler for this scenario yet!')
+    }
+}
+
+
+function operandHandler(button) {
+    if (equalsActive) {
+        console.log("equals already active");
+        currentTopValue =  [];
+        screenTop.textContent = currentTopValue;
+        currentMainValue = button.id;
+        screenMain.textContent = currentMainValue;
+    // if top value has insufficient formula abort code
+    // if valid formula run operate and output new topvalue and main value
+    } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
+        console.log(`Active operand found: ${currentOperand}`)
+
+        currentTopValue.push(currentMainValue);
+        screenTop.textContent = currentTopValue.join('');
+        currentMainValue = operate(currentTopValue);
+        screenMain.textContent = currentMainValue;
+        operandActive = true;
+        
+    } else {
+    currentOperand = button;
+    operandActive = true;
+    console.log(`Current operand is now ${currentOperand}`);
+    currentTopValue.push(currentMainValue);
+    currentTopValue.push(currentOperand);
+    screenTop.textContent = currentTopValue.join('');
     }
 }
 
@@ -192,6 +243,8 @@ function hasPeriod(str) {
 }
 
 function allClear() {
+    currentOperand = null;
+    operandActive = false;
     decimalActive = false;
     equalsActive = false;
     currentMainValue = 0;
@@ -201,7 +254,7 @@ function allClear() {
 };
 
 function clear(number) {
-    if (number === 0) {
+    if (number === 0 || number == NaN) {
         currentMainValue = 0;
         return screenMain.textContent = currentMainValue;
     } else if (number <= 9) {

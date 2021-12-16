@@ -158,7 +158,7 @@ function handleClick(button) {
 
 
     } else if ('operand' in button.dataset) {
-        equalsActive = false;
+        // equalsActive = false;
         decimalActive = false;
         operandHandler(button.id);
 
@@ -171,7 +171,7 @@ function handleClick(button) {
             screenTop.textContent = currentTopValue.join('');
             if (currentTopValue.length < 3) {
                 console.log('insufficient formula')
-            } else if (currentTopValue.length > 3) {
+            } else if (currentTopValue.length >= 3) {
                 console.log("Too many indexes in formula")
             } else {
             let result = operate(currentTopValue);
@@ -215,7 +215,7 @@ function operandHandler(button) {
         clear the main value ready for a new number/button to be pressed
         */ 
 
-        if (currentTopValue.length > 3) {
+        if (currentTopValue.length >= 3) {
             currentTopValue[2] = currentMainValue;
         }
         currentTopValue.push(currentMainValue);

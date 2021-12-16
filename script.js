@@ -4,7 +4,7 @@ let currentMainValue = 0;
 
 function displayMain(displayValue) {
 currentMainValue = displayValue;
-screenMain.textContent = currentMainValue;
+return screenMain.textContent = currentMainValue;
 }
 
 displayMain(0);
@@ -14,7 +14,7 @@ const screenTop = document.querySelector('.screen-top');
 currentTopValue = [];
 
 function displayTop() {
-screenTop.textContent = currentTopValue;
+return screenTop.textContent = currentTopValue;
 };
 
 
@@ -171,6 +171,8 @@ function handleClick(button) {
             screenTop.textContent = currentTopValue.join('');
             if (currentTopValue.length < 3) {
                 console.log('insufficient formula')
+            } else if (currentTopValue.length > 3) {
+                console.log("Too many indexes in formula")
             } else {
             let result = operate(currentTopValue);
             currentMainValue = result;
@@ -207,6 +209,15 @@ function operandHandler(button) {
     } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
         console.log(`Active operand found: ${currentOperand}`)
 
+        /*
+        1 + 2 
+        if operand or equals operate and return result to mainvalue - any operand or equals does the same thing
+        clear the main value ready for a new number/button to be pressed
+        */ 
+
+        if (currentTopValue.length > 3) {
+            currentTopValue[2] = currentMainValue;
+        }
         currentTopValue.push(currentMainValue);
         screenTop.textContent = currentTopValue.join('');
         currentMainValue = operate(currentTopValue);

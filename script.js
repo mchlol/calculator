@@ -18,8 +18,8 @@ return screenTop.textContent = currentTopValue;
 };
 
 
-let currentOperand;
-let operandActive = false;
+let currentoperator;
+let operatorActive = false;
 let decimalActive = false;
 let equalsActive = false;
 
@@ -61,26 +61,9 @@ function operate(array) {
         case "/":
             return divide(array[0],array[2]);
         default: 
-            console.log("no operand input");
+            console.log("no operator input");
     }
 }
-
-
-// ## FUNCTION USING VARIABLES
-// function operate(num1, operand, num2) {
-//     switch(operand) {
-//         case add:
-//             return add(num1,num2);
-//         case subtract:
-//             return subtract(num1,num2);
-//         case multiply:
-//             return multiply(num1,num2);
-//         case divide:
-//             return divide(num1,num2);
-//         default: 
-//             console.log("no operand input");
-//     }
-// }
 
 
 buttons.forEach(button => {
@@ -100,8 +83,8 @@ function handleClick(button) {
 
     } else if ('decimal' in button.dataset) {
 
-        if (operandActive) {
-            // check if operand active first
+        if (operatorActive) {
+            // check if operator active first
             // if so, clear currentMainValue & replace with "0."
             decimalActive = true;
             console.log(`decimalActive: ${decimalActive}`)
@@ -129,7 +112,7 @@ function handleClick(button) {
             return screenMain.textContent = currentMainValue;
         }
 
-        else if (operandActive) {
+        else if (operatorActive) {
             if (button.id == 0) { // if 0 is pressed add it to the displayed number
                 currentMainValue += button.id;
                 return screenMain.textContent = currentMainValue;
@@ -154,8 +137,8 @@ function handleClick(button) {
         }
 
 
-    } else if ('operand' in button.dataset) {
-        return operandHandler(button.id);
+    } else if ('operator' in button.dataset) {
+        return operatorHandler(button.id);
 
 
     } else if ('equals' in button.dataset) {
@@ -193,41 +176,46 @@ function handleClick(button) {
 }
 
 
-function operandHandler(button) {
+function operatorHandler(button) {
 
     if (equalsActive) {
-        console.log("operandHandler(): equals already active, clearing top value & setting main value to button id");
-        currentTopValue = [0];
+        console.log(`operatorHandler(): equals already active
+                    setting topValue array to currentMainValue only
+                    and setting currentMainValue to button.id`);
+        currentTopValue = [currentMainValue];
         screenTop.textContent = currentTopValue;
         currentMainValue = button.id;
         return screenMain.textContent = currentMainValue;
 
     } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
-        console.log(`operandhandler: Active operand found: ${currentOperand}`)
+        console.log(`operatorhandler: Active operator found: ${currentoperator}`)
 
         // if top value has 3 or more indexes change the last one for the new main value
         if (currentTopValue.length >= 3) {
             currentTopValue[2] = currentMainValue;
+            console.log(`if the topValue array has three values, this changes the last one to the currentMain Value and does nothing else. 
+            What should it be doing?`)
         } else if (currentTopValue.length < 3) {
             currentTopValue.push(currentMainValue);
             screenTop.textContent = currentTopValue.join('');
             currentMainValue = operate(currentTopValue);
             
-            operandActive = true;
-            console.log(`operandActive: ${operandActive}`)
+            operatorActive = true;
+            console.log(`operatorActive: ${operatorActive}`)
             // equalsActive = true;
             console.log(`equalsActive: ${equalsActive}`)
-
+            console.log(`say we press 1 + 2, then pressing + will calculate [1, +, 2] and show 3 in the main value. if we press + again, top value should be [currentMainValue, currentoperator] 
+            `)
             return screenMain.textContent = currentMainValue;
         }
 
-    } else { // equals is not active and we are just changing the active operand    
-    currentOperand = button;
-    operandActive = true;
-    console.log(`operandActive: ${operandActive}`)
-    console.log(`Current operand is now ${currentOperand}`);
+    } else { // equals is not active and we are just changing the active operator    
+    currentoperator = button;
+    operatorActive = true;
+    console.log(`operatorActive: ${operatorActive}`)
+    console.log(`Current operator is now ${currentoperator}`);
     currentTopValue.push(currentMainValue);
-    currentTopValue.push(currentOperand);
+    currentTopValue.push(currentoperator);
     return screenTop.textContent = currentTopValue.join('');
     }
 }
@@ -254,8 +242,8 @@ function hasPeriod(str) {
 }
 
 function allClear() {
-    currentOperand = null;
-    operandActive = false;
+    currentoperator = null;
+    operatorActive = false;
     decimalActive = false;
     equalsActive = false;
     currentMainValue = 0;

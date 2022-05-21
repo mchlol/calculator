@@ -130,7 +130,7 @@ function handleClick(button) {
         }
 
         else if (operandActive) {
-            if (button.id === 0) {
+            if (button.id == 0) { // if 0 is pressed add it to the displayed number
                 currentMainValue += button.id;
                 return screenMain.textContent = currentMainValue;
             }
@@ -197,7 +197,7 @@ function operandHandler(button) {
 
     if (equalsActive) {
         console.log("operandHandler(): equals already active, clearing top value & setting main value to button id");
-        currentTopValue = [];
+        currentTopValue = [0];
         screenTop.textContent = currentTopValue;
         currentMainValue = button.id;
         return screenMain.textContent = currentMainValue;

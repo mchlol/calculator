@@ -59,7 +59,7 @@ Thinking firstly about the steps involved in using a calculator, and also review
 ```
 click button  
 if number, display on screenMain  
-if there is a number on screenMain, next number should append to it's right  
+if there is a number on screenMain, next number should append to its right  
     if (screen contains numbers) { screenValue + button.id}  
 if operand is clicked, move first number to top of screen  
     operands: add, subtract, divide, multiply  

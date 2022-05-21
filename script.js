@@ -92,13 +92,11 @@ buttons.forEach(button => {
 // max numbers = 10
 function handleClick(button) {
     if (button.id === 'allclear') {
-        allClear();
+        return allClear();
 
 
     } else if (button.id === 'clear') {
-        decimalActive = false;
-        clear(currentMainValue);
-
+        return clear(currentMainValue);
 
     } else if ('decimal' in button.dataset) {
 
@@ -106,15 +104,14 @@ function handleClick(button) {
             // check if operand active first
             // if so, clear currentMainValue & replace with "0."
             decimalActive = true;
+            console.log(`decimalActive: ${decimalActive}`)
             currentMainValue = "0.";
-            screenMain.textContent = currentMainValue;
+            return screenMain.textContent = currentMainValue;
         } else if (decimalActive === true) {
-            console.log(`Decimal point present: ${decimalActive}`);
+            return console.log(`decimalActive: ${decimalActive}`)
             // do nothing - unable to add a 2nd decimal point
         } else {
-            // declare decimal present & run function to add it
-        decimalActive = true;
-        decimalPoint(currentMainValue);
+        return decimalPoint(currentMainValue);
         }
 
 
@@ -122,72 +119,71 @@ function handleClick(button) {
 
         if (decimalActive) {
             currentMainValue += button.id;
-            screenMain.textContent = currentMainValue;
+            return screenMain.textContent = currentMainValue;
 
         } else if (equalsActive) {
             console.log("equals already active");
             currentTopValue =  [];
             screenTop.textContent = currentTopValue;
             currentMainValue = button.id;
-            screenMain.textContent = currentMainValue;
+            return screenMain.textContent = currentMainValue;
         }
 
         else if (operandActive) {
-            console.log(`operand active: ${operandActive}`)
-            
+            if (button.id === 0) {
+                currentMainValue += button.id;
+                return screenMain.textContent = currentMainValue;
+            }
             currentMainValue = button.id;
-            screenMain.textContent = currentMainValue;
-            operandActive = false;
-            decimalActive = false;
+            return screenMain.textContent = currentMainValue;
         }
         
         else if (currentMainValue == 0) {
 
             if (decimalActive) {
                 currentMainValue += button.id;
-                screenMain.textContent = currentMainValue;
+                return screenMain.textContent = currentMainValue;
             } else {
             currentMainValue = button.id;
-            screenMain.textContent = currentMainValue;
+            return screenMain.textContent = currentMainValue;
             }
 
         } else {
         currentMainValue += button.id;
-        screenMain.textContent = currentMainValue;
+        return screenMain.textContent = currentMainValue;
         }
 
 
     } else if ('operand' in button.dataset) {
-        // equalsActive = false;
-        decimalActive = false;
-        operandHandler(button.id);
+        return operandHandler(button.id);
 
 
     } else if ('equals' in button.dataset) {
-        console.log(`equals already active: ${equalsActive}`);
         if (!equalsActive) {
-            equalsActive = true;
+            equalsActive = true; // if equalsActive is false, set it to true
+            console.log(`equalsActive: ${equalsActive}`);
             currentTopValue.push(currentMainValue);
             screenTop.textContent = currentTopValue.join('');
             if (currentTopValue.length < 3) {
-                console.log('insufficient formula')
-            } else if (currentTopValue.length >= 3) {
-                console.log("Too many indexes in formula")
+                return console.log('insufficient formula')
+            } else if (currentTopValue.length > 3) {
+                return console.log("Too many indexes in formula")
             } else {
             let result = operate(currentTopValue);
             currentMainValue = result;
-            screenMain.textContent = currentMainValue;
+            return screenMain.textContent = currentMainValue;
             }
         
         } else {
             equalsActive = true;
+            console.log(`equalsActive: ${equalsActive}`)
             // if formula is 1+2=3 then new formula should be 3+2
             currentTopValue[0] = currentMainValue;
             screenTop.textContent = currentTopValue.join('');
             
             let result = operate(currentTopValue);
             currentMainValue = result;
-            screenMain.textContent = currentMainValue;
+            return screenMain.textContent = currentMainValue;
 
     }
 
@@ -198,43 +194,47 @@ function handleClick(button) {
 
 
 function operandHandler(button) {
+
     if (equalsActive) {
-        console.log("equals already active");
-        currentTopValue =  [];
+        console.log("operandHandler(): equals already active, clearing top value & setting main value to button id");
+        currentTopValue = [];
         screenTop.textContent = currentTopValue;
         currentMainValue = button.id;
-        screenMain.textContent = currentMainValue;
-    // if top value has insufficient formula abort code
-    // if valid formula run operate and output new topvalue and main value
+        return screenMain.textContent = currentMainValue;
+
     } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
-        console.log(`Active operand found: ${currentOperand}`)
+        console.log(`operandhandler: Active operand found: ${currentOperand}`)
 
-        /*
-        1 + 2 
-        if operand or equals operate and return result to mainvalue - any operand or equals does the same thing
-        clear the main value ready for a new number/button to be pressed
-        */ 
-
+        // if top value has 3 or more indexes change the last one for the new main value
         if (currentTopValue.length >= 3) {
             currentTopValue[2] = currentMainValue;
+        } else if (currentTopValue.length < 3) {
+            currentTopValue.push(currentMainValue);
+            screenTop.textContent = currentTopValue.join('');
+            currentMainValue = operate(currentTopValue);
+            
+            operandActive = true;
+            console.log(`operandActive: ${operandActive}`)
+            // equalsActive = true;
+            console.log(`equalsActive: ${equalsActive}`)
+
+            return screenMain.textContent = currentMainValue;
         }
-        currentTopValue.push(currentMainValue);
-        screenTop.textContent = currentTopValue.join('');
-        currentMainValue = operate(currentTopValue);
-        screenMain.textContent = currentMainValue;
-        operandActive = true;
-        
-    } else {
+
+    } else { // equals is not active and we are just changing the active operand    
     currentOperand = button;
     operandActive = true;
+    console.log(`operandActive: ${operandActive}`)
     console.log(`Current operand is now ${currentOperand}`);
     currentTopValue.push(currentMainValue);
     currentTopValue.push(currentOperand);
-    screenTop.textContent = currentTopValue.join('');
+    return screenTop.textContent = currentTopValue.join('');
     }
 }
 
 function decimalPoint(number) {
+    decimalActive = true;
+    console.log(`decimalActive: ${decimalActive}`)
     let decimalAdded = number += ".";
     currentMainValue = decimalAdded;
     return screenMain.textContent = currentMainValue;
@@ -247,9 +247,9 @@ function isFloat(n){
 
 function hasPeriod(str) {
     if (str.includes('.')) {
-        console.log('float presented as string')
+        return console.log('float presented as string')
     } else {
-        console.log('not a float')
+        return console.log('not a float')
     }
 }
 
@@ -261,24 +261,20 @@ function allClear() {
     currentMainValue = 0;
     screenMain.textContent = currentMainValue;
     currentTopValue = [];
-    screenTop.textContent = currentTopValue;
+    return screenTop.textContent = currentTopValue;
 };
 
 function clear(number) {
-    if (number === 0 || number == NaN) {
+    if (number <= 9 || number === NaN) {
         currentMainValue = 0;
         return screenMain.textContent = currentMainValue;
-    } else if (number <= 9) {
-        currentMainValue = 0;
-        return screenMain.textContent = currentMainValue;
-    } else if (number > 10) {
+    } else if (number > 10 || isFloat(number)) {
         let string = number.toString();
         let newString = string.slice(0,-1);
         let newNumber = parseInt(newString);
         currentMainValue = newNumber;
         return screenMain.textContent = currentMainValue;
-    } else if (isFloat(number)) {
-        console.log("number is a floating point integer");
+        // if number is a float either higher or lower than 10 this codeblock will still execute
     } else {
         return console.error("no clear condition to handle this value");
     }

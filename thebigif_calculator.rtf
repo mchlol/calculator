@@ -1,55 +1,56 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2580
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;\f2\fswiss\fcharset0 Helvetica-Oblique;
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-Oblique;
 }
 {\colortbl;\red255\green255\blue255;\red168\green24\blue75;\red221\green32\blue103;\red251\green2\blue7;
-\red251\green2\blue7;\red198\green50\blue253;\red134\green205\blue77;\red0\green0\blue0;\red85\green142\blue40;
-\red134\green205\blue77;\red18\green145\blue206;\red198\green50\blue253;\red0\green0\blue255;\red0\green0\blue0;
-\red0\green0\blue255;\red85\green142\blue40;}
+\red127\green127\blue127;\red198\green50\blue253;\red134\green205\blue77;\red0\green0\blue0;\red85\green142\blue40;
+\red18\green145\blue206;\red0\green0\blue255;\red0\green0\blue0;}
 {\*\expandedcolortbl;;\cssrgb\c72439\c17643\c36556;\cssrgb\c90234\c23206\c47866;\cssrgb\c100000\c14913\c0;
-\cssrgb\c100000\c14913\c0;\cssrgb\c82670\c34053\c99466;\cssrgb\c58755\c82661\c37297;\csgray\c0\c0;\cssrgb\c39975\c61335\c20601;
-\cssrgb\c58755\c82661\c37297;\cssrgb\c0\c63852\c84489;\cssrgb\c82670\c34053\c99466;\cssrgb\c1680\c19835\c100000;\cssrgb\c0\c0\c0;
-\cssrgb\c1680\c19835\c100000;\cssrgb\c39975\c61335\c20601;}
+\cssrgb\c57046\c57047\c57046;\cssrgb\c82670\c34053\c99466;\cssrgb\c58755\c82661\c37297;\csgray\c0\c0;\cssrgb\c39975\c61335\c20601;
+\cssrgb\c0\c63852\c84489;\cssrgb\c1680\c19835\c100000;\cssrgb\c0\c0\c0;}
 \paperw11900\paperh16840\margl1440\margr1440\vieww15900\viewh15600\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f0\fs24 \cf0 If button is allClear\
-	
-\f1\b \cf2 run allClear function
-\f0\b0 \cf0 \
+\f0\b\fs28 \cf0 If button is allClear\
+
+\f1\b0\fs24 	
+\f0\b \cf2 run allClear function
+\f1\b0 \cf0 \
 		
-\f2\i \cf3 // clear all values (as if page was refreshed)
-\f0\i0 \cf0 \
+\f2\i \cf3 // resets all the values back to default
+\f1\i0 \cf0 \
 \
 If button is clear, \
-	set decimalActive to false\cf4  \cf5 ** this needs to move: run clear function and set decimalActive to false based on conditions **\cf0 \
+	set decimalActive to false\cf4  ** this needs to move: run clear function and set decimalActive to false based on conditions **\cf0 \
 	
-\f1\b \cf2 run clear function with currentMainValue as argument for parameter \'93number\'94
-\f0\b0 \cf0 \
-		
-\f2\i \cf3 // if number is 0 or NaN  
-\f0\i0 \cf4 ** remove this - prevent NaN being reached, if we got NaN we got bigger problems **
-\f2\i \cf3 \
-			set currentMainValue to 0 & display it\
+\f0\b \cf2 run clear function with currentMainValue as argument for parameter \'93number\'94
+\f1\b0 \cf0 \
+\cf5 		
+\f2\i // if number is 0 or NaN  
+\f1\i0 ** remove this - NaN can\'92t be compared, so we need to prevent NaN being reached at all **
+\f2\i \
+			set currentMainValue to 0 & display it\cf3 \
 		if number is 9 or lower (single digits) *
-\f0\i0 \cf4 * this also covers being 0 **
+\f1\i0 \cf4 * this also covers being 0 **
 \f2\i \cf3 \
 			set currentMainValue to 0 & display it\
 		if number is higher than 10 (multiple digits)\
 			convert number to string and slice the last character *
-\f0\i0 \cf4 * what does slice do? **
+\f1\i0 \cf4 * what does slice do? **
 \f2\i \cf3 \
 			convert it back to a number and return it in currentMainValue & display it\
 		if number is a float
-\f0\i0 \cf4 \
-			** if decimal present at 2nd to last index \
+\f1\i0 \cf4 \
+			** if decimal present at 2nd to last index (if indexOf === $\{position\} return true? How to count from end?\
 				remove the last 2 characters, \
 			ELSE remove the last 1 character **\
 			
 \f2\i \cf3 \
 		ELSE log error in console - no handlers 
-\f0\i0 \cf0 \
+\f1\i0 \cf0 \
 \
-If button is decimal\
+
+\f0\b\fs28 If button is decimal
+\f1\b0\fs24 \
 	\cf6 if an operand is active\cf0 \
 		set decimalActive to true\
 		set currentMainValue to \'930.\'94 & display it on the screen. \cf4 ** why are we setting it to 0? **\cf0 \
@@ -59,50 +60,49 @@ If button is decimal\
 \
 	ELSE set decimalActive to true\
 	then 
-\f1\b \cf2 \cb8 run decimal point function
-\f0\b0 \cf0 \cb1 \
+\f0\b \cf2 \cb8 run decimal point function
+\f1\b0 \cf0 \cb1 \
 		
 \f2\i \cf3 // add decimal to the end of the currentMainValue string & display
-\f0\i0 \cf0 \
+\f1\i0 \cf0 \
 \
-If button is number\
-\cf9 	\cf10 if decimal is active\cf9 \
+
+\f0\b\fs28 If button is number
+\f1\b0\fs24 \
+\cf9 	\cf7 if decimal is active\cf9 \
 		add button.id to the end of the currentMainValue string & display it\cf0 \
-	\cf11 if equals is active\cf0 \
+	\cf10 if equals is active\cf0 \
 		clear currentTopValue & set currentMainValue to button.id + display both\
-	\cf12 if an operand is active\cf0 \
-		\cf13 set currentMainValue to button.id & display it\cf0 \
+	\cf6 if an operand is active\cf0 \
+		\cf11 set currentMainValue to button.id & display it\cf0 \
 		set operandActive & decimalActive to false\
 	if currentMainValue is 0\
 		\cf9 if decimal is active\
 			add button.id to the end of the currentMainValue string & display It\
-		\cf14 ELSE \cf15 set currentMainValue to button.id & display it\cf14 \
-	ELSE \cf16 add button.id to the end of the currentMainValue string & display it\
+		\cf12 ELSE \cf11 set currentMainValue to button.id & display it\cf12 \
+	ELSE \cf9 add button.id to the end of the currentMainValue string & display it\
 \cf0 \
-If button is operand 
-\f1\b ** issue pushing currentMainValue to end of currentTopValue array when button is operand **
-\f0\b0 \
-	set equalsActive to false \cf4 ** why are we setting these variables to false? **\cf0 \
-	set decimalActive to false\
+
+\f0\b\fs28 If button is operand 
+\fs24 \cf4 ** bug: this code always pushes currentMainValue to end of currentTopValue array when button is operand **
+\f1\b0 \cf0 \
 	
-\f1\b \cf2 run operand handler function with button.id as argument for parameter \'93button\'94
-\f0\b0 \cf3 \
+\f0\b \cf2 run operand handler function with button.id as argument for parameter \'93button\'94
+\f1\b0 \cf3 \
 		
-\f2\i // if equals active 
-\f0\i0 \cf4 ** but we just set it to false !? **
-\f2\i \cf3 \
+\f2\i // if equals active \
 			clear currentTopValue, set currentMainValue to button.id & display it\
 		if currentTopValue includes +, -, *, or /\
-			if currentTopValue is longer than 3 indexes swap the last one for the currentMainValue \cf4 *
-\f0\i0 * this feels wrong **
+			if currentTopValue is 3 indexes or longer, change the last one to the currentMainValue \cf4 *
+\f1\i0 * this feels wrong **
 \f2\i \
 			\cf3 ELSE add currentMainValue to the end of the array & display joined 
-\f0\i0 \cf4 ** we only want to do this if the array has less than 3 indexes **
+\f1\i0 \cf4 ** we only want to do this if the array has less than 3 indexes **
 \f2\i \cf3 \
 			currentMainValue to store result of operation (run function) & display\
 			set operandActive to true\
 		ELSE set currentOperand to button 
-\f0\i0 \cf4 ** what is this variable? This is the only function using it **
+\f1\i0 \cf12 //this variable exists to display the operand in the top value
 \f2\i \cf3 \
 		set operandActive to true\
 		push currentMainValue to the end of currentTopValue array\
@@ -110,20 +110,21 @@ If button is operand
 		display on screenTop, joined\
 \
 
-\f0\i0 \cf14 If button is equals \cf4 ** we either want to add currentMainValue to the end of the array, or to the start with the result of the previous formula at the end **\
-\cf14 	if equals is NOT active\
-		set equalsActive to true\
-		push currentMainValue to the end of currentTopValue array & display on screenTop, joined \cf4 ** move to end? **\cf14 \
+\f0\i0\b\fs28 \cf12 If button is equals
+\f1\b0\fs24  \cf4 ** we either want to add currentMainValue to the end of the array, or to the start with the result of the previous formula at the end **\
+\cf12 	if equals is NOT active\
+		is it now, so set equalsActive to true\
+		push currentMainValue to the end of currentTopValue array & display on screenTop, joined \cf4 ** move to end? **\cf12 \
 		if currentTopValue has less than 3 indexes	\
 			not enough indexes to operate\
 		if currentTopValue has more than 3 indexes\
-			too many indexes to operate \cf4 ** prevent [1, \'91+\'92, 2, 3] **\cf14 \
-	ELSE set equalsActive to true\
+			too many indexes to operate \cf4 ** prevent [1, \'91+\'92, 2, 3] **\cf12 \
+	ELSE (if equals is true) set equalsActive to true \cf4 ** this is unnecessary **\cf12 \
 		set first index of currentTopValue to currentMainValue & display joined\
 		perform the calculation, store in currentMainValue & display it\
 \
 ELSE no handlers 
 \f2\i \cf3 \
 		
-\f0\i0 \cf0 \
+\f1\i0 \cf0 \
 	}

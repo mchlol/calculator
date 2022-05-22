@@ -1,55 +1,40 @@
 const screenMain = document.querySelector('.screen-main');
+const screenTop = document.querySelector('.screen-top');
+const buttons = document.querySelectorAll('.btn');
 
 let currentMainValue = 0;
-
-function displayMain(displayValue) {
-currentMainValue = displayValue;
-return screenMain.textContent = currentMainValue;
-}
-
-displayMain(0);
-
-const screenTop = document.querySelector('.screen-top');
-
-currentTopValue = [];
-
-function displayTop() {
-return screenTop.textContent = currentTopValue;
-};
-
-
-let currentoperator;
+let currentTopValue = [];
+let currentOperator;
 let operatorActive = false;
 let decimalActive = false;
 let equalsActive = false;
 
-const buttons = document.querySelectorAll('.btn');
+// ## DISPLAY FUNCTIONS
+function displayMain(displayValue) {
+currentMainValue = displayValue;
+return screenMain.textContent = currentMainValue;
+} ;
+
+function displayTop() {
+    return screenTop.textContent = currentTopValue;
+    };
+
+displayMain(0);
 
 
-const add = function add(num1, num2) {
-    return Number(num1) + Number(num2);
-}
-
-const subtract = function subtract(num1, num2) {
-    return Number(num1) - Number(num2);
-}
-
-const multiply = function multiply(num1, num2) {
-    return Number(num1) * Number(num2);
-}
-
+// #### MATH FUNCTIONS ####
+const add = function add(num1, num2) { return Number(num1) + Number(num2); }
+const subtract = function subtract(num1, num2) { return Number(num1) - Number(num2); }
+const multiply = function multiply(num1, num2) { return Number(num1) * Number(num2); }
 const divide = function divide(num1, num2) {
     if (num2 == 0) {
         alert("Cannot divide by zero - resetting values")
         return allClear();
-    } else {
-    return Number(num1) / Number(num2);
-    }
+    } else { return Number(num1) / Number(num2); }
 }
 
-// stack can be an array eg. [1, “*”, 1]
 
-// ## FUNCTION USING ARRAY STACK
+// ## CALCULATOR FUNCTION USING ARRAY STACK eg. [1, “*”, 1]
 function operate(array) {
     switch(array[1]) {
         case "+":
@@ -65,7 +50,7 @@ function operate(array) {
     }
 }
 
-
+// begin functions!
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         handleClick(button);
@@ -113,10 +98,12 @@ function handleClick(button) {
         }
 
         else if (operatorActive) {
+            console.log(`operatorActive: ${operatorActive}`)
             if (button.id == 0) { // if 0 is pressed add it to the displayed number
+                console.log(`button.id is 0`)
                 currentMainValue += button.id;
                 return screenMain.textContent = currentMainValue;
-            }
+            } 
             currentMainValue = button.id;
             return screenMain.textContent = currentMainValue;
         }
@@ -188,13 +175,12 @@ function operatorHandler(button) {
         return screenMain.textContent = currentMainValue;
 
     } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
-        console.log(`operatorhandler: Active operator found: ${currentoperator}`)
+        console.log(`operatorHandler: Active operator found: ${currentOperator}`)
 
         // if top value has 3 or more indexes change the last one for the new main value
         if (currentTopValue.length >= 3) {
-            currentTopValue[2] = currentMainValue;
-            console.log(`if the topValue array has three values, this changes the last one to the currentMain Value and does nothing else. 
-            What should it be doing?`)
+            currentTopValue = [currentMainValue, currentOperator];
+            screenTop.textContent = currentTopValue;
         } else if (currentTopValue.length < 3) {
             currentTopValue.push(currentMainValue);
             screenTop.textContent = currentTopValue.join('');
@@ -204,18 +190,18 @@ function operatorHandler(button) {
             console.log(`operatorActive: ${operatorActive}`)
             // equalsActive = true;
             console.log(`equalsActive: ${equalsActive}`)
-            console.log(`say we press 1 + 2, then pressing + will calculate [1, +, 2] and show 3 in the main value. if we press + again, top value should be [currentMainValue, currentoperator] 
+            console.log(`say we press 1 + 2, then pressing + will calculate [1, +, 2] and show 3 in the main value. if we press + again, top value should be [currentMainValue, currentOperator] 
             `)
             return screenMain.textContent = currentMainValue;
         }
 
     } else { // equals is not active and we are just changing the active operator    
-    currentoperator = button;
+    currentOperator = button;
     operatorActive = true;
     console.log(`operatorActive: ${operatorActive}`)
-    console.log(`Current operator is now ${currentoperator}`);
+    console.log(`Current operator is now ${currentOperator}`);
     currentTopValue.push(currentMainValue);
-    currentTopValue.push(currentoperator);
+    currentTopValue.push(currentOperator);
     return screenTop.textContent = currentTopValue.join('');
     }
 }
@@ -242,7 +228,7 @@ function hasPeriod(str) {
 }
 
 function allClear() {
-    currentoperator = null;
+    currentOperator = null;
     operatorActive = false;
     decimalActive = false;
     equalsActive = false;

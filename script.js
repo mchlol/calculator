@@ -116,8 +116,9 @@ function handleClick(button) {
             currentMainValue = button.id;
             screenMain.textContent = currentMainValue;
         } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
+            let result = operate(currentTopValue);
             currentMainValue = button.id;
-            currentTopValue = [];
+            currentTopValue = [result,currentOperator];
             screenMain.textContent = currentMainValue;
             return screenTop.textContent = currentTopValue.join('');
         } 

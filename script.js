@@ -107,7 +107,7 @@ function handleClick(button) {
 
         } else if (equalsActive) {
             console.log("equals already active");
-            currentTopValue =  [];
+            currentTopValue = [];
             screenTop.textContent = currentTopValue;
             currentMainValue = button.id;
             return screenMain.textContent = currentMainValue;
@@ -192,9 +192,11 @@ function operatorHandler(button) {
 
         // if top value has 3 or more indexes change the last one for the new main value
         if (currentTopValue.length >= 3) {
-            currentTopValue = [currentMainValue, currentOperator];
-            screenTop.textContent = currentTopValue;
+            currentTopValue[2] = currentMainValue;
+            console.log(`currentTopValue: ${currentTopValue}`)
+            return screenTop.textContent = currentTopValue;
         } else if (currentTopValue.length < 3) {
+            console.log(`Starting currentTopValue: ${currentTopValue}`)
             currentTopValue.push(currentMainValue);
             screenTop.textContent = currentTopValue.join('');
             currentMainValue = operate(currentTopValue);
@@ -203,6 +205,7 @@ function operatorHandler(button) {
             console.log(`operatorActive: ${operatorActive}`)
             // equalsActive = true;
             console.log(`equalsActive: ${equalsActive}`)
+            console.log(`Ending currentTopValue: ${currentTopValue}`)
             return screenMain.textContent = currentMainValue;
         }
 

@@ -9,6 +9,7 @@ let currentOperator;
 let operatorActive = false;
 let decimalActive = false;
 let equalsActive = false;
+let lastBtnPressed = null;
 
 
 // ## DISPLAY FUNCTIONS
@@ -38,6 +39,7 @@ const multiply = function multiply(num1, num2) { return Number(num1) * Number(nu
 const divide = function divide(num1, num2) {
     if (num2 == 0) {
         alert("Cannot divide by zero - resetting values")
+        console.clear();
         return allClear();
     } else { return Number(num1) / Number(num2); }
 }
@@ -68,17 +70,15 @@ buttons.forEach(button => {
 
 // max numbers = 10
 function handleClick(button) {
+    lastBtnPressed = button.id;
+    console.log(`last button pressed: ${lastBtnPressed}`)
     if (button.id === 'allclear') {
-        console.log(`button pressed: ${button.id}`);
         return allClear();
 
-
     } else if (button.id === 'clear') {
-        console.log(`button pressed: ${button.id}`);
         return clear(currentMainValue);
 
     } else if ('decimal' in button.dataset) {
-        console.log(`button pressed: ${button.id}`);
         alert(`Sorry, this isn't working yet!`);
 
         // if (operatorActive) {
@@ -97,7 +97,6 @@ function handleClick(button) {
 
 
     } else if ('number' in button.dataset) { 
-        console.log(`button pressed: ${button.id}`);
 
         /// add a new condition if zero button was pressed
 
@@ -118,7 +117,7 @@ function handleClick(button) {
             screenMain.textContent = currentMainValue;
         } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
             currentMainValue = button.id;
-            currentTopValue = [currentMainValue, currentOperator];
+            currentTopValue = [];
             screenMain.textContent = currentMainValue;
             return screenTop.textContent = currentTopValue.join('');
         } 
@@ -140,13 +139,12 @@ function handleClick(button) {
 
 
     } else if ('operator' in button.dataset) {
-        console.log(`button pressed: ${button.id}`);
         return operatorHandler(button.id);
 
 
     } else if ('equals' in button.dataset) {
         if (!equalsActive) {
-            equalsActive = true; // if equalsActive is false, set it to true
+            equalsActive = true; 
             console.log(`equalsActive: ${equalsActive}`);
             currentTopValue.push(currentMainValue);
             screenTop.textContent = currentTopValue.join('');
@@ -193,19 +191,19 @@ function operatorHandler(button) {
         // if top value has 3 or more indexes change the last one for the new main value
         if (currentTopValue.length >= 3) {
             currentTopValue[2] = currentMainValue;
-            console.log(`currentTopValue: ${currentTopValue}`)
-            return screenTop.textContent = currentTopValue;
+            console.log(`operatorHandler: currentTopValue is ${currentTopValue}`)
+            return screenTop.textContent = currentTopValue.join('');
         } else if (currentTopValue.length < 3) {
-            console.log(`Starting currentTopValue: ${currentTopValue}`)
+            console.log(`operatorHandler: Starting currentTopValue is ${currentTopValue}`)
             currentTopValue.push(currentMainValue);
             screenTop.textContent = currentTopValue.join('');
             currentMainValue = operate(currentTopValue);
             
             operatorActive = true;
-            console.log(`operatorActive: ${operatorActive}`)
+            console.log(`operatorHandler: operatorActive is ${operatorActive}`)
             // equalsActive = true;
-            console.log(`equalsActive: ${equalsActive}`)
-            console.log(`Ending currentTopValue: ${currentTopValue}`)
+            console.log(`operatorHandler: equalsActive is ${equalsActive}`)
+            console.log(`operatorHandler: Ending currentTopValue is ${currentTopValue}`)
             return screenMain.textContent = currentMainValue;
         }
 
@@ -254,7 +252,7 @@ function allClear() {
 };
 
 function clear(number) {
-    if (number <= 9 || number === NaN) { // we can't check for NaN!
+    if (number <= 9) {
         currentMainValue = 0;
         return screenMain.textContent = currentMainValue;
     } else if (number > 10 || isFloat(number)) {

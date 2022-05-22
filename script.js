@@ -1,3 +1,4 @@
+// variable declarations
 const screenMain = document.querySelector('.screen-main');
 const screenTop = document.querySelector('.screen-top');
 const buttons = document.querySelectorAll('.btn');
@@ -9,13 +10,20 @@ let operatorActive = false;
 let decimalActive = false;
 let equalsActive = false;
 
+
 // ## DISPLAY FUNCTIONS
-function displayMain(displayValue) {
-currentMainValue = displayValue;
-return screenMain.textContent = currentMainValue;
+function displayMain(value) {
+    if (value == 0 || value === ".") {
+        currentMainValue += value;
+    } else {
+    currentMainValue = value;
+    }
+    return screenMain.textContent = currentMainValue;
 } ;
 
-function displayTop() {
+
+function displayTop(value) {
+    currentTopValue = value;
     return screenTop.textContent = currentTopValue;
     };
 
@@ -23,6 +31,7 @@ displayMain(0);
 
 
 // #### MATH FUNCTIONS ####
+
 const add = function add(num1, num2) { return Number(num1) + Number(num2); }
 const subtract = function subtract(num1, num2) { return Number(num1) - Number(num2); }
 const multiply = function multiply(num1, num2) { return Number(num1) * Number(num2); }
@@ -60,30 +69,37 @@ buttons.forEach(button => {
 // max numbers = 10
 function handleClick(button) {
     if (button.id === 'allclear') {
+        console.log(`button pressed: ${button.id}`);
         return allClear();
 
 
     } else if (button.id === 'clear') {
+        console.log(`button pressed: ${button.id}`);
         return clear(currentMainValue);
 
     } else if ('decimal' in button.dataset) {
+        console.log(`button pressed: ${button.id}`);
+        alert(`Sorry, this isn't working yet!`);
 
-        if (operatorActive) {
-            // check if operator active first
-            // if so, clear currentMainValue & replace with "0."
-            decimalActive = true;
-            console.log(`decimalActive: ${decimalActive}`)
-            currentMainValue = "0.";
-            return screenMain.textContent = currentMainValue;
-        } else if (decimalActive === true) {
-            return console.log(`decimalActive: ${decimalActive}`)
-            // do nothing - unable to add a 2nd decimal point
-        } else {
-        return decimalPoint(currentMainValue);
-        }
+        // if (operatorActive) {
+        //     // check if operator active first
+        //     // if so, clear currentMainValue & replace with "0."
+        //     decimalActive = true;
+        //     console.log(`decimalActive: ${decimalActive}`)
+        //     currentMainValue = "0.";
+        //     return screenMain.textContent = currentMainValue;
+        // } else if (decimalActive === true) {
+        //     return console.log(`decimalActive: ${decimalActive}`)
+        //     // do nothing - unable to add a 2nd decimal point
+        // } else {
+        // return decimalPoint(currentMainValue);
+        // }
 
 
     } else if ('number' in button.dataset) { 
+        console.log(`button pressed: ${button.id}`);
+
+        /// add a new condition if zero button was pressed
 
         if (decimalActive) {
             currentMainValue += button.id;
@@ -97,16 +113,15 @@ function handleClick(button) {
             return screenMain.textContent = currentMainValue;
         }
 
-        else if (operatorActive) {
-            console.log(`operatorActive: ${operatorActive}`)
-            if (button.id == 0) { // if 0 is pressed add it to the displayed number
-                console.log(`button.id is 0`)
-                currentMainValue += button.id;
-                return screenMain.textContent = currentMainValue;
-            } 
+        else if (currentTopValue.length === 2) {
             currentMainValue = button.id;
-            return screenMain.textContent = currentMainValue;
-        }
+            screenMain.textContent = currentMainValue;
+        } else if (currentTopValue.includes("+" || "-" || "*" || "/")) {
+            currentMainValue = button.id;
+            currentTopValue = [currentMainValue, currentOperator];
+            screenMain.textContent = currentMainValue;
+            return screenTop.textContent = currentTopValue.join('');
+        } 
         
         else if (currentMainValue == 0) {
 
@@ -125,6 +140,7 @@ function handleClick(button) {
 
 
     } else if ('operator' in button.dataset) {
+        console.log(`button pressed: ${button.id}`);
         return operatorHandler(button.id);
 
 
@@ -166,9 +182,6 @@ function handleClick(button) {
 function operatorHandler(button) {
 
     if (equalsActive) {
-        console.log(`operatorHandler(): equals already active
-                    setting topValue array to currentMainValue only
-                    and setting currentMainValue to button.id`);
         currentTopValue = [currentMainValue];
         screenTop.textContent = currentTopValue;
         currentMainValue = button.id;
@@ -190,8 +203,6 @@ function operatorHandler(button) {
             console.log(`operatorActive: ${operatorActive}`)
             // equalsActive = true;
             console.log(`equalsActive: ${equalsActive}`)
-            console.log(`say we press 1 + 2, then pressing + will calculate [1, +, 2] and show 3 in the main value. if we press + again, top value should be [currentMainValue, currentOperator] 
-            `)
             return screenMain.textContent = currentMainValue;
         }
 
@@ -228,6 +239,7 @@ function hasPeriod(str) {
 }
 
 function allClear() {
+    console.clear();
     currentOperator = null;
     operatorActive = false;
     decimalActive = false;
@@ -239,7 +251,7 @@ function allClear() {
 };
 
 function clear(number) {
-    if (number <= 9 || number === NaN) {
+    if (number <= 9 || number === NaN) { // we can't check for NaN!
         currentMainValue = 0;
         return screenMain.textContent = currentMainValue;
     } else if (number > 10 || isFloat(number)) {
